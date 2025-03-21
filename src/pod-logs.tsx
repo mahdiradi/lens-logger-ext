@@ -76,6 +76,20 @@ export class PodLogs {
                       <StatusBrick />
                       <span>{containerName}</span>
                     </MenuItem>
+                    <MenuItem
+                      key={`only_save_${containerName}`}
+                      onClick={Common.Util.prevDefault(() =>
+                        this.savePodLogs(
+                          resourceNs,
+                          resourceName,
+                          resourceTitle,
+                          containerName
+                        )
+                      )}
+                    >
+                      <StatusBrick />
+                      <span>save log {containerName}</span>
+                    </MenuItem>
                   )
                 })}
               </SubMenu>
@@ -93,11 +107,27 @@ export class PodLogs {
     containerName?: string
   ) {
     // Generate log command with bunyan
-    const cmd = `kubectl logs -f -n ${resourceNs} ${resourceName} -c ${containerName} --tail=300 | bunyan -o short`
+    const cmd = `kubectl logs -f -n ${resourceNs} ${resourceName} -c ${containerName} --tail=300`
 
     // Open new terminal
     this.openTerminal(
-      `${resourceTitle}: ${resourceName}:${containerName} | bunyan`,
+      `${resourceTitle}: ${resourceName}:${containerName}`,
+      cmd
+    )
+  }
+
+  private static savePodLogs(
+    resourceNs: string,
+    resourceName: string,
+    resourceTitle: string,
+    containerName?: string
+  ) {
+    // Generate log command with bunyan
+    const cmd = `kubectl logs -f -n ${resourceNs} ${resourceName} -c ${containerName} --tail=300`
+
+    // Open new terminal
+    this.openTerminal(
+      `${resourceTitle}: ${resourceName}:${containerName}`,
       cmd
     )
   }
