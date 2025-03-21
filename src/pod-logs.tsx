@@ -54,7 +54,7 @@ export class PodLogs {
           interactive={props.toolbar}
           tooltip="Logs w/Bunyan"
         />
-        <span className="title">Logs w/Bunyan</span>
+        <span className="title">Logs</span>
         {
           containerNames.size >= 1 && (
             <>
