@@ -122,14 +122,15 @@ export class PodLogs {
     resourceTitle: string,
     containerName?: string
   ) {
-    // Generate log command with bunyan
-    const cmd = `kubectl logs -f -n ${resourceNs} ${resourceName} -c ${containerName} --tail=300`
 
-    // Open new terminal
-    this.openTerminal(
-      `${resourceTitle}: ${resourceName}:${containerName}`,
-      cmd
-    )
+    // Generate log command
+    const tempFilePath = `C:\\Windows\\Temp\\${resourceName}_${containerName}.txt`
+    const cmd = `kubectl logs -n ${resourceNs} ${resourceName} -c ${containerName} > "${tempFilePath}"`
+
+    // Delay to ensure logs are written, then open the file
+    setTimeout(() => {
+      this.openTerminal("Open Log File", `notepad "${tempFilePath}"`)
+    }, 3000) // Adjust delay as needed    
   }
 
   private static openTerminal(title: string, command: string) {
